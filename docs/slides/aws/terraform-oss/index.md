@@ -298,6 +298,13 @@ name: IaC2
 **Now that all your infrastructure is stored in a source code repository, it's very easy for multiple users and teams to collaborate on it. Developer needs a new feature? He or she can easily adjust the source code and send the change back to the operations folks for review. Terraform is a universal language that is understood by both developers and operations teams.**
 
 ---
+name: IaC2
+# Challenges of Infrastructure as Code
+*State Management*: Managing state files can be complex, especially in large projects with multiple environments.
+*Drift*: Infrastructure drift occurs when the actual state of your infrastructure deviates from the expected state defined in your code.
+*Learning Curve*: The initial learning curve for IaC tools and principles can be steep for teams new to automation.
+
+---
 name: IaC-Tools
 # Other Infrastructure as Code Tools
 .center[![:scale 40%](images/infra_tools.png)]
