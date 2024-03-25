@@ -625,11 +625,6 @@ name: lab-exercise-1
 <br><br>
 In this lab you'll learn how to set up your editor, use the Terraform command line tool, integrate with AWS, and do a few dry runs with different settings.
 
-To format the Terraform basics exercise for a Remark.js presentation, you need to split the content into slides and adapt it to the Remark.js markdown syntax. This format includes dividing your content into slides using `---` and ensuring it fits well for presentation purposes. Below is how you can adapt the content for Remark.js:
-
-```markdown
-class: center, middle
-
 # Terraform Basics Lab Exercise
 ## 👩‍💻 Get Hands-On with Terraform
 
