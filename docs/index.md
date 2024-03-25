@@ -50,10 +50,10 @@ name:workshop-slides
 # Viewing Workshop Slides
 #### You can view workshop slides with URLs like these:
 * https://projectcircleil.github.io/field-workshops-terraform/slides/aws/terraform-oss/index.html
-* https://projectcircleil.github.io/field-workshops-terraform/slides/azure/terraform-oss/index.html
-* https://projectcircleil.github.io/field-workshops-terraform/slides/gcp/terraform-oss/index.html
 
 ???
+* https://projectcircleil.github.io/field-workshops-terraform/slides/azure/terraform-oss/index.html
+* https://projectcircleil.github.io/field-workshops-terraform/slides/gcp/terraform-oss/index.html
 The workshop slides are written in Remark.js.
 
 They are published with GitHub Pages.
