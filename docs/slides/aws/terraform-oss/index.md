@@ -31,17 +31,16 @@ Instructor notes are included in plain text, narrative parts are in **bold**. Yo
 layout: true
 
 .footer[
-- Copyright © 2021 HashiCorp
 - ![:scale 100%](https://hashicorp.github.io/field-workshops-assets/assets/logos/HashiCorp_Icon_Black.svg)
 ]
 
 ---
 name: Introductions
 # Introductions
-- Your Name
-- Job Title
-- Automation Experience
-- Favorite Text Editor
+- Omri Siri
+- CEO 
+- 20+ Years in IT and Devops
+- VIM is my favorite text editor
 
 ???
 Use this slide to introduce yourself, give a little bit of your background story, then go around the room and have all your participants introduce themselves.
@@ -51,14 +50,6 @@ The favorite text editor question is a good ice breaker, but perhaps more import
 **There are no wrong answers to this question. Unless you say Notepad. Friends don't let friends write code in Notepad.**
 
 **If you don't have a favorite text editor, that's okay! Our cloud lab has Visual Studio Code preinstalled. VSC is a free programmer's text editor for Microsoft, and it has great Terraform support. Most of this workshop will be simply copying and pasting code, so if you're not a developer don't fret. Terraform is easy to learn and fun to work with.**
-
----
-name: Link-to-Slide-Deck
-# The Slide Deck
-<br><br><br>
-Follow along on your own computer at this link:
-
-### <https://git.io/JerH6>
 
 ---
 name: Table-of-Contents
@@ -627,13 +618,6 @@ This list goes from highest precedence (1) to lowest (5).
    specified, prompt the user
    for entry
 ```
----
-name: lab-exercise-0
-# 👩‍💻 Getting Started with Instruqt
-<br><br>
-[Instruqt](https://instruqt.com) is the HashiCorp training platform. Visit the link below for a short tutorial, or if you're already familiar with Instruqt you can skip to the next slide.
-
-[https://instruqt.com/instruqt/tracks/getting-started-with-instruqt](https://instruqt.com/instruqt/tracks/getting-started-with-instruqt)
 
 ---
 name: lab-exercise-1
@@ -641,9 +625,95 @@ name: lab-exercise-1
 <br><br>
 In this lab you'll learn how to set up your editor, use the Terraform command line tool, integrate with AWS, and do a few dry runs with different settings.
 
-Your instructor will provide the URL for the lab environment.
+To format the Terraform basics exercise for a Remark.js presentation, you need to split the content into slides and adapt it to the Remark.js markdown syntax. This format includes dividing your content into slides using `---` and ensuring it fits well for presentation purposes. Below is how you can adapt the content for Remark.js:
 
-🛑 **STOP** after you complete the second quiz.
+```markdown
+class: center, middle
+
+# Terraform Basics Lab Exercise
+## 👩‍💻 Get Hands-On with Terraform
+
+# Objectives
+
+1. Set Up Your Editor
+2. Install Terraform
+3. AWS Integration
+4. First Terraform Configuration
+5. Initialization and Planning
+6. Applying Configuration
+7. Destruction
+
+---
+
+# Step 1: Setting Up Your Editor
+
+- Install the Terraform extension/plugin in your code editor for enhanced syntax highlighting and auto-completion support.
+
+---
+
+# Step 2: Installing Terraform
+
+- Go to the [Terraform website](https://www.terraform.io/downloads.html) and download the appropriate package for your operating system.
+- Follow the installation instructions to make Terraform available from your command line.
+
+---
+
+# Step 3: Configuring AWS Access
+
+- Create an IAM user in your AWS account with programmatic access.
+- Attach the `AmazonEC2FullAccess` policy.
+- Configure your AWS CLI with the access key and secret key of the IAM user.
+
+---
+
+# Step 4: Writing Your First Terraform Configuration
+
+```hcl
+provider "aws" {
+  region = "us-west-2"
+}
+
+resource "aws_s3_bucket" "my_bucket" {
+  bucket = "my-terraform-bucket"
+  acl    = "private"
+}
+```
+- Create a file named `main.tf`.
+- Add the above content to define a provider and an S3 bucket resource.
+
+---
+
+# Step 5: Initializing and Planning
+
+- Open your terminal and navigate to the directory containing `main.tf`.
+- Run `terraform init` to initialize the workspace.
+- Run `terraform plan` to see the proposed actions.
+
+---
+
+# Step 6: Applying the Configuration
+
+- Execute `terraform apply` to create the S3 bucket.
+- Confirm the action when prompted.
+
+---
+
+# Step 7: Destroying the Infrastructure
+
+- Run `terraform destroy` to remove the resources you created.
+- Confirm the action when prompted.
+
+---
+
+class: center, middle
+
+# Congratulations!
+
+## 🎉 You have completed the Terraform Basics Lab Exercise.
+```
+
+This format breaks down the lab exercise into individual slides, making it easy for presentation and instruction during a Remark.js-based course. Each slide focuses on a single topic or step, ensuring the information is clear and digestible for the audience.
+
 ---
 name: chapter-2-review
 # 📝 Chapter 2 Review
