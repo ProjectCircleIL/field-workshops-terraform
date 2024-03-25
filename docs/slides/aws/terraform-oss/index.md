@@ -706,9 +706,6 @@ class: center, middle
 # Congratulations!
 
 ## 🎉 You have completed the Terraform Basics Lab Exercise.
-```
-
-This format breaks down the lab exercise into individual slides, making it easy for presentation and instruction during a Remark.js-based course. Each slide focuses on a single topic or step, ensuring the information is clear and digestible for the audience.
 
 ---
 name: chapter-2-review
