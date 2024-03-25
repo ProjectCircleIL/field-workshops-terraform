@@ -628,6 +628,7 @@ In this lab you'll learn how to set up your editor, use the Terraform command li
 # Terraform Basics Lab Exercise
 ## 👩‍💻 Get Hands-On with Terraform
 
+---
 # Objectives
 
 1. Set Up Your Editor
