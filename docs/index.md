@@ -1,6 +1,6 @@
 name: terraform-field-workshops-index
 class: title, shelf, no-footer, fullbleed
-background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
+background-image: url(https://projectcircleil.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
 .white[
@@ -49,9 +49,9 @@ You can also indent one kind of list under another as done in this slide.  To ma
 name:workshop-slides
 # Viewing Workshop Slides
 #### You can view workshop slides with URLs like these:
-* https://hashicorp.github.io/field-workshops-terraform/slides/aws/terraform-oss/index.html
-* https://hashicorp.github.io/field-workshops-terraform/slides/azure/terraform-oss/index.html
-* https://hashicorp.github.io/field-workshops-terraform/slides/gcp/terraform-oss/index.html
+* https://projectcircleil.github.io/field-workshops-terraform/slides/aws/terraform-oss/index.html
+* https://projectcircleil.github.io/field-workshops-terraform/slides/azure/terraform-oss/index.html
+* https://projectcircleil.github.io/field-workshops-terraform/slides/gcp/terraform-oss/index.html
 
 ???
 The workshop slides are written in Remark.js.
