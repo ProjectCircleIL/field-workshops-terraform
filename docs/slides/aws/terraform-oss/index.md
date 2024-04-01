@@ -1160,8 +1160,9 @@ This ensures the S3 bucket is created before the object.
 name: Meta-Arguments-Lifecycle
 # Using `lifecycle` Meta-Arguments
 
-???
 `lifecycle` meta-arguments control the lifecycle of a resource, such as preventing accidental deletion.
+
+---
 
 ```hcl
 resource "aws_s3_bucket" "example" {
@@ -1186,12 +1187,12 @@ name: Lab-Managing-Dependencies
 class: title
 # Lab Exercise: Managing Dependencies
 
-???
 In this lab, you'll practice defining explicit dependencies between resources and using meta-arguments to control resource behavior.
 
+---
 ## Objective:
 Create an AWS VPC, a security group within that VPC, and an instance that uses the security group. Ensure the security group is created before the instance.
-
+---
 ### Steps:
 1. **Define the VPC:**
    Create a `main.tf` with a VPC resource.
@@ -1203,6 +1204,7 @@ Create an AWS VPC, a security group within that VPC, and an instance that uses t
      }
    }
    ```
+---
 2. **Define the Security Group:**
    Add a security group that depends on the VPC.
    ```hcl
@@ -1211,6 +1213,7 @@ Create an AWS VPC, a security group within that VPC, and an instance that uses t
      // Additional configuration...
    }
    ```
+---
 3. **Define the Instance:**
    Create an instance that uses the security group. Use the `depends_on` meta-argument to ensure the security group is created first.
    ```hcl
@@ -1222,131 +1225,14 @@ Create an AWS VPC, a security group within that VPC, and an instance that uses t
      depends_on = [aws_security_group.example_sg]
    }
    ```
+---
 4. **Apply Configuration:**
    Initialize Terraform and apply your configuration. Observe the order in which resources are created.
 
+---
 ### Deliverable:
 Submit the `main.tf` file along with a screenshot of the `terraform apply` command output showing the resources being created in the correct order.
 
----
-
-name: Workspaces-Intro
-class: title
-# Deep Dive into Terraform Workspaces
-
-???
-Terraform workspaces allow you to manage multiple states using the same configuration. This is especially useful for managing different environments like development, staging, and production.
-
----
-
-name: Workspaces-Creation
-# Creating and Managing Workspaces
-
-???
-To create a new workspace and switch between workspaces, use the `terraform workspace` command.
-
-### Creating a New Workspace:
-```shell
-terraform workspace new dev
-```
-
-### Switching Between Workspaces:
-```shell
-terraform workspace select dev
-```
-
-### Listing Workspaces:
-```shell
-terraform workspace list
-```
-
-This flexibility allows you to apply different configurations for each environment using the same Terraform files.
-
----
-
-name: Workspaces-Usage-Example
-# Example: Using Workspaces to Manage Environments
-
-???
-Consider a scenario where you want different instance sizes for your app in development vs. production environments.
-
-### Define the Instance with a Variable:
-```hcl
-resource "aws_instance" "app" {
-  instance_type = var.instance_type
-  // Additional configuration...
-}
-```
-
-### Use Workspace Names to Set the Variable:
-In `variables.tf`, define `instance_type` without a default. Then, in `dev.tfvars` and `prod.tfvars`, specify the instance types:
-
-**dev.tfvars:**
-```hcl
-instance_type = "t2.micro"
-```
-
-**prod.tfvars:**
-```hcl
-instance_type = "t2.large"
-```
-
-Apply configurations using the respective workspace and `.tfvars` file to manage your environments efficiently.
-
----
----
-
-name: Lab-Workspaces
-class: title
-# Lab Exercise: Using Terraform Workspaces
-
-???
-In this lab, you will practice using Terraform workspaces to manage different environments for a hypothetical web application. You will create separate environments for development and production, each with different configurations.
-
-## Objective:
-Leverage Terraform workspaces to apply different configurations for development and production environments of a simple AWS EC2 instance.
-
-### Steps:
-1. **Prepare Your Configuration:**
-   In your `main.tf`, define an AWS EC2 instance with a dynamic instance type based on the workspace.
-   ```hcl
-   resource "aws_instance" "web" {
-     ami = "ami-0c55b159cbfafe1f0"
-     instance_type = var.instance_type[terraform.workspace]
-     // Other configurations...
-   }
-   ```
-   In `variables.tf`, define the `instance_type` variable as a map to accommodate different workspaces.
-   ```hcl
-   variable "instance_type" {
-     type = map(string)
-     default = {
-       default = "t2.micro"
-       dev = "t2.small"
-       prod = "t2.large"
-     }
-   }
-   ```
-2. **Initialize Workspaces:**
-   Initialize the Terraform configuration, then create two new workspaces named `dev` and `prod`.
-   ```shell
-   terraform init
-   terraform workspace new dev
-   terraform workspace new prod
-   ```
-3. **Apply Configuration to Each Workspace:**
-   Apply the Terraform configuration to each workspace, observing the differences.
-   ```shell
-   terraform workspace select dev
-   terraform apply
-   terraform workspace select prod
-   terraform apply
-   ```
-4. **Observe the Differences:**
-   Use the AWS Management Console or AWS CLI to observe the differences in the EC2 instances created in the `dev` and `prod` environments.
-
-### Deliverable:
-Submit your `main.tf` and `variables.tf` files along with screenshots or logs demonstrating the EC2 instances created for each workspace.
 
 ---
 
