@@ -1593,7 +1593,9 @@ resource "aws_security_group" "app_sg" {
     }
   }
 }
-
+```
+---
+```hcl
 variable "ingress_rules" {
   description = "A map of ingress rules for the security group"
   type = map(object({
@@ -1602,6 +1604,9 @@ variable "ingress_rules" {
     protocol    = string
     cidr_blocks = list(string)
   }))
+```
+---
+```hcl
   default = {
     ssh = {
       from_port   = 22
@@ -1672,6 +1677,133 @@ Submit your Terraform configuration files demonstrating the use of advanced tech
 
 ---
 
+name: Introduction-to-Terraform-Modules
+class: title
+# Introduction to Terraform Modules
+
+Terraform modules encapsulate a collection of resources that are used together. This section introduces the concept of modules, explaining why they're beneficial and how they can be utilized to create more maintainable and reusable Terraform configurations.
+---
+
+name: Understanding-Terraform-Modules
+# Understanding Terraform Modules
+
+A Terraform module is a container for multiple resources that are used together. Modules can be used to create lightweight abstractions, so that you can describe your infrastructure in terms of its architecture, rather than directly in terms of physical objects.
+---
+
+### Benefits of Using Modules:
+- **Reusability:** Write once, use multiple times. Avoid duplicating code.
+- **Organization:** Group related resources together to organize infrastructure components logically.
+- **Manageability:** Simplify complex infrastructure into manageable chunks.
+- **Versioning:** Utilize different versions of modules for different environments or updates.
+
+---
+
+name: Creating-Terraform-Modules
+# Creating Terraform Modules
+
+Creating a module involves defining resources in a dedicated directory. This directory can then be referenced from other Terraform configurations.
+---
+
+### Steps to Create a Module:
+1. **Define the Module:** Create a new directory for your module and add `.tf` files that define the resources the module will manage.
+2. **Use Input Variables:** Define variables for your module to accept input values.
+3. **Define Output Values:** Specify outputs to return information about the resources in the module.
+
+---
+### Example: Creating a VPC Module
+- **Directory Structure:**
+  ```
+  modules/
+  └── vpc/
+      ├── main.tf
+      ├── variables.tf
+      └── outputs.tf
+  ```
+---
+
+- **main.tf:**
+  ```hcl
+  resource "aws_vpc" "example" {
+    cidr_block = var.cidr_block
+    tags = {
+      Name = "MyVPC"
+    }
+  }
+  ```
+
+---
+- **variables.tf:**
+  ```hcl
+  variable "cidr_block" {
+    description = "The CIDR block for the VPC"
+    type        = string
+  }
+  ```
+
+---
+- **outputs.tf:**
+  ```hcl
+  output "vpc_id" {
+    value = aws_vpc.example.id
+  }
+  ```
+
+---
+
+name: Using-Terraform-Modules
+# Using Terraform Modules
+
+Once you have created a module, you can use it in your Terraform configurations by referencing its path.
+---
+
+### Example: Referencing a Local Module
+```hcl
+module "my_vpc" {
+  source      = "./modules/vpc"
+  cidr_block  = "10.0.0.0/16"
+}
+```
+---
+
+### Example: Referencing a Module from Terraform Registry
+```hcl
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "2.77.0"
+  cidr_block  = "10.0.0.0/16"
+  # Other required variables...
+}
+```
+
+---
+
+name: Refactoring-to-Modules-Lab
+class: title
+# Lab: Refactoring to Terraform Modules
+
+This lab exercise guides you through the process of refactoring an existing Terraform configuration into a modular architecture.
+---
+
+## Objective:
+Refactor an existing flat Terraform configuration into a more manageable, modular structure.
+---
+
+### Scenario:
+You have a Terraform configuration that defines an AWS VPC, subnets, and security groups. Your task is to refactor this configuration into a modular structure.
+---
+
+### Steps:
+1. **Analyze the Existing Configuration:** Identify logical groupings of resources that can be abstracted into modules (e.g., networking resources).
+2. **Create Modules:** Based on your analysis, create separate directories for each module and move the related resources into the appropriate module.
+3. **Define Module Inputs and Outputs:** For each module, define necessary input variables and outputs.
+4. **Update the Main Configuration:** Replace the original resource definitions in your main configuration with references to your new modules.
+5. **Test Your Refactoring:** Initialize and apply your configuration to ensure that the modular structure correctly replicates the original architecture without changes to the infrastructure.
+
+---
+### Deliverable:
+Submit your refactored Terraform configuration, including the main configuration file and the created modules. Include a brief explanation of how you organized the resources into modules and any challenges you encountered.
+
+---
 name: Integrating-Terraform-into-CICD-Intro
 class: title
 # Integrating Terraform into CI/CD Pipelines
