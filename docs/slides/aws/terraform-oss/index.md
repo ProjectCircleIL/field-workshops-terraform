@@ -1109,6 +1109,7 @@ resource "aws_instance" "example" {
 
   vpc_security_group_ids = [aws_security_group.example.id]
 }
+```
 
 In this example, Terraform understands that the instance must not be created until the security group is available.
 
@@ -1166,12 +1167,18 @@ resource "aws_s3_bucket" "example" {
 
   lifecycle {
     prevent_destroy = true
+    # This configuration prevents the bucket from being destroyed when applying `terraform destroy`.
+    create_before_destroy = true
+    # This configuration creates a new bucket before destroying the old one.
+    ignore_changes = [tags]
+    # This configuration ignores changes to the tags attribute.
+  }
+}
 ```hcl
   }
 }
 ```
 
-This configuration prevents the bucket from being destroyed when applying `terraform destroy`.
 
 ---
 
