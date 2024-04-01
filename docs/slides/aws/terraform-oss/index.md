@@ -1407,4 +1407,157 @@ Import an existing AWS S3 bucket into Terraform.
 Submit your `main.tf` file and a screenshot of the `terraform state list` command output showing the imported S3 bucket.
 
 ---
+---
 
+name: Securing-Terraform-Deployments-Intro
+class: title
+# Securing Terraform Deployments
+
+???
+Ensuring the security of your Terraform deployments involves managing secrets and sensitive data carefully. This section will cover strategies for securely handling secrets in Terraform.
+
+---
+
+name: Managing-Secrets
+# Managing Secrets in Terraform
+
+???
+Terraform can use various methods to manage secrets and sensitive information, ensuring they are not exposed in your configurations or state files.
+
+### Using Environment Variables:
+Environment variables can be used to keep secrets out of your Terraform configurations.
+```shell
+export TF_VAR_secret_key="your_secret_key_here"
+```
+These can then be referenced in your Terraform configurations without hardcoding sensitive information.
+
+### Using Terraform Vault Provider:
+The Terraform Vault provider allows storing and retrieving secrets from HashiCorp Vault, a dedicated secrets management tool.
+```hcl
+data "vault_generic_secret" "db_password" {
+  path = "secret/data/db/password"
+}
+
+output "db_password" {
+  value = data.vault_generic_secret.db_password.data["password"]
+  sensitive = true
+}
+```
+
+### Marking Variables as Sensitive:
+You can mark variables as sensitive in Terraform to prevent their values from being displayed in logs or console output.
+```hcl
+variable "api_key" {
+  type      = string
+  sensitive = true
+}
+```
+
+---
+
+name: Lab-Securing-Deployments
+class: title
+# Lab Exercise: Securing Terraform Deployments
+
+???
+In this lab, you will practice securing your Terraform deployments by managing secrets with environment variables and the Vault provider.
+
+## Objective:
+Configure a Terraform project to securely manage an API key.
+
+### Steps:
+1. **Set up an Environment Variable:**
+   Define an environment variable for your API key.
+2. **Reference the Environment Variable:**
+   Modify your Terraform configuration to use the environment variable for any resource requiring the API key.
+3. **Use Vault for Extra Security (Optional):**
+   If you have access to a Vault server, store and retrieve the API key using the Vault provider in Terraform.
+4. **Apply Your Configuration:**
+   Run `terraform apply` and ensure the API key is used correctly without being exposed in logs.
+
+### Deliverable:
+Submit your modified Terraform configuration files and a brief explanation of the steps you took to secure the API key. Ensure no sensitive information is included in your submission.
+
+---
+
+name: Advanced-Terraform-Techniques-Intro
+class: title
+# Advanced Terraform Techniques
+
+???
+Beyond the basics, Terraform offers advanced techniques for more dynamic and flexible infrastructure management. This section explores loops, conditional expressions, and error handling.
+
+---
+
+name: Loops-and-Conditional-Expressions
+# Using Loops and Conditional Expressions
+
+???
+Terraform supports loop constructs like `count`, `for_each`, and dynamic blocks to create multiple instances of resources based on a list or map. Conditional expressions can be used to include or modify resources based on specified conditions.
+
+### Example: Creating Multiple Instances with `count`:
+```hcl
+resource "aws_instance" "app_server" {
+  count         = length(var.instance_ids)
+  ami           = var.ami_id
+  instance_type = "t2.micro"
+}
+```
+
+### Conditional Creation of Resources:
+```hcl
+resource "aws_elastic_ip" "eip" {
+  count = var.create_eip ? 1 : 0
+  instance = aws_instance.app_server[0].id
+}
+```
+
+---
+
+name: Error-Handling
+# Error Handling in Terraform
+
+???
+Error handling in Terraform can be managed through careful use of input variable validations, preconditions, and sensible defaults to prevent configuration errors.
+
+### Example: Variable Validation
+```hcl
+variable "instance_type" {
+  type        = string
+  description = "EC2 instance type"
+
+  validation {
+    condition     = contains(["t2.micro", "t2.small", "t2.medium"], var.instance_type)
+    error_message = "The instance type must be t2.micro, t2.small, or t2.medium."
+  }
+}
+```
+
+This validation ensures the `instance_type` variable is within the expected values, preventing potential runtime errors.
+
+---
+
+name: Lab-Advanced-Techniques
+class: title
+# Lab Exercise: Advanced Terraform Techniques
+
+???
+In this lab, you will apply advanced Terraform techniques by utilizing loops, conditional expressions, and implementing error handling in your configurations.
+
+## Objective:
+Enhance a Terraform configuration to dynamically create resources based on input variables and conditions, with proper error handling.
+
+### Steps:
+1. **Dynamic Resource Creation:**
+   Use `count` or `for_each` to create a dynamic number of AWS S3 buckets based on input variables.
+2. **Conditional Resource Creation:**
+   Add a condition to create an AWS Elastic IP only if a specific variable is set to true.
+3
+
+. **Add Variable Validation:**
+   Implement validation for an input variable to ensure it meets specific criteria.
+
+### Deliverable:
+Submit your Terraform configuration files demonstrating the use of advanced techniques. Include a brief description of how each technique is applied in your configuration.
+
+---
