@@ -64,7 +64,6 @@ name: Table-of-Contents
 1. Provision and Configure AWS Instances<br>
 🔬 **Lab - Provisioning with Terraform**<br>
 1. Manage and Change Infrastructure State<br>
-1. Terraform Cloud<br>
 ⚗️ **Lab - Terraform Remote State**
 
 
@@ -977,16 +976,6 @@ The region and prefix variables are required to create the resource group, which
 This is a good spot to talk a bit about how the dependency graph gets formed.
 
 ---
-name: lab-exercise-2a
-# 👩‍💻 Lab Exercise: Terraform in Action
-Let's use Terraform to build, manage, and destroy AWS resources. In this lab exercise you'll build the HashiCat application stack by running the `terraform apply` command.
-
-🛑 **STOP** after you complete the third quiz.
-
-???
-**We will explore the Terraform Graph together once everyone has completed the lab. Once you have the graph running in your instruqt lab stop there.**
-
----
 name: chapter-3-review
 # 📝 Chapter 3 Review
 
@@ -1002,111 +991,6 @@ In this chapter we:
 name: Chapter-4
 class: title
 # Chapter 4
-## Provision and Configure AWS Instances
-
----
-name: intro-to-provisioners
-# Using Terraform Provisioners
-Once you've used Terraform to stand up a virtual machine or container, you may wish to configure your operating system and applications. This is where provisioners come in. Terraform supports several different types of provisioners including: Bash, Powershell, Chef, Puppet, Ansible, and more.
-
-.center[https://www.terraform.io/docs/provisioners/index.html]
-
-???
-**Terraform works hand-in-hand with these other configuration management tools to install packages, configure applications and change OS settings inside of a virtual machine or container.**
-
----
-name: file-provisioner
-class: compact
-# The File Provisioner
-The Terraform file provisioner copies files onto the remote machine.
-
-```terraform
-provisioner "file" {
-  source        = "files/"
-  destination   = "/home/${var.admin_username}/"
-
-  connection {
-    type        = "ssh"
-    user        = var.username
-    private_key = file(var.ssh_key)
-    host        = ${self.ip}
-  }
-}
-```
-
-Note the *connection* block of code inside the provisioner block. The file provisioner supports both SSH and WinRM connections.
-
-???
-SSH for linux, WinRM for your windows machines.
-
----
-name: remote-exec-provisioner
-class: compact
-# The Remote Exec Provisioner
-The remote exec provisioner allows you to execute scripts or other programs on the target host. If it's something you can run unattended (for example, a software installer), then you can run it with remote exec.
-
-```terraform
-provisioner "remote-exec" {
-  inline = [
-    "sudo chown -R ${var.admin_username}:${var.admin_username} /var/www/html",
-    "chmod +x *.sh",
-    "PLACEHOLDER=${var.placeholder} WIDTH=${var.width} HEIGHT=${var.height} PREFIX=${var.prefix} ./deploy_app.sh",
-  ]
-...
-}
-```
-
-In this example we're running a few commands to change some permissions and ownership, and to run a script with some enviroment variables.
-
-???
-Local exec and remote exec can be used to trigger Puppet or Ansible runs. We do have a dedicated chef provisioner as well.
-
----
-name: puppet-chef-ansible
-class: compact
-# Terraform & Config Management Tools
-.center[![:scale 50%](images/cpa.jpg)]
-
-Terraform works well with common config management tools like Chef, Puppet or Ansible.
-
-Run Puppet with 'local-exec':<br>
-https://www.terraform.io/docs/provisioners/local-exec.html
-
-Terraform and Ansible - Better Together:<br>
-https://github.com/scarolan/ansible-terraform
-
----
-name: provisioner-tips
-# Terraform Provisioner Tips
-Terraform provisioners like remote-exec are great when you need to run a few simple commands or scripts. For more complex configuration management you'll want a tool like Chef or Ansible.
-
-Provisioners only run the first time a Terraform run is executed. In this sense, they are not idempotent. If you need ongoing state management of VMs or servers that are long-lived, we recommend using a config management tool.
-
-On the other hand, if you want immutable infrastructure you should consider using our [Packer](https://packer.io) tool.
-
----
-name: lab-exercise-2b
-# 👩‍💻 Lab Exercise: Provisioners, Variables and Outputs
-In part two of the lab we'll use a provisioner to install a new software package. We will also explore variables and outputs.
-
-Return to the training lab and continue where you left off.
-
-🛑 **STOP** after you complete the fourth quiz.
-
----
-name: chapter-4-review
-# 📝 Chapter 4 Review
-.contents[
-In this chapter we:
-* Learned about Terraform Provisioners
-* Explored the **file** and **remote-exec** provisioners
-* Rebuilt our web server with a new provisioning step
-]
-
----
-name: Chapter-5
-class: title
-# Chapter 5
 ## Terraform State
 
 ---
@@ -1194,98 +1078,220 @@ class: compact
 What happens in each scenario? Discuss.
 
 ---
-name: Chapter-6
+name: Chapter-5
 class: title
-# Chapter 6
-## Terraform Cloud
+# Chapter 5
+## Resource dependencies and meta-arguments
 
 ---
-name: terraform-cloud
-class: img-right
-# Terraform Cloud
-##### Terraform Cloud is a free to use SaaS application that provides the best workflow for writing and building infrastructure as code with Terraform.
-![Terraform Cloud](https://hashicorp.github.io/field-workshops-assets/assets/logos/Terraform_Cloud_Logo_Color_RGB.png)
-
-* State storage and management
-* Web UI for viewing and approving Terraform runs
-* Private module registry
-* Version Control System (VCS) integration
-* CLI, API or GUI driven actions
-* Notifications for run events
-* Full HTTP API for automation
+Given the complexity and depth of each topic, providing detailed slides, examples, and lab exercises for each section will be quite extensive. Let's start with the first section on "Managing Dependencies and Meta-Arguments in Terraform."
 
 ---
-name: tfcloud-vs-tfe
-class: compact
-# Terraform Cloud or Terraform Enterprise?
-**[Terraform Cloud](https://app.terraform.io/signup)** is a hosted application that provides features like remote state management, API driven runs, policy management and more. Many users prefer a cloud-based SaaS solution because they don't want to maintain the infrastructure to run it.
 
-**[Terraform Cloud for Business](https://www.hashicorp.com/contact-sales/terraform)** utilizes the same hosted environment as Terraform Cloud, but you get the features more applicable to larger teams.  Single Sign-on, Audit Logging, the abbility to use [Agents](https://www.terraform.io/cloud-docs/agents) to deploy in private environments, and integrate with external tools via [Run Tasks](https://www.terraform.io/cloud-docs/integrations/run-tasks).
+```markdown
+---
+name: Managing-Dependencies-and-Meta-Arguments-Intro
+class: title
+# Understanding Dependencies and Meta-Arguments
 
-**[Terraform Enterprise](https://www.hashicorp.com/go/terraform-enterprise)** is the same application, but it runs in your own cloud environment or data center. Some users require more control over the Terraform Cloud application, or wish to run it in restricted networks behind corporate firewalls.
-
-The feature list for these offerings is nearly identical. We will be using Terraform Cloud accounts for our lab exercises today.
+???
+This module will introduce you to the concepts of managing dependencies and utilizing meta-arguments within your Terraform configurations. Mastering these concepts allows for more robust and reliable infrastructure as code.
 
 ---
-name: terraform-cloud-remote-state
-# Terraform Remote State
-By default Terraform stores its state file in the workspace directory on your laptop or workstation. This is ok for development and experimentation, but in a production environment you need to protect and store the state file safely.
 
-Terraform has an option to store and secure your state files remotely. Terraform Cloud accounts now offer unlimited state file storage even for open source users.
+name: Dependencies-Explanation
+# Understanding Resource Dependencies
 
-All state files are encrypted (using HashiCorp Vault) and stored securely in your Terraform Cloud account. You'll never have to worry about losing or deleting your state file again.
+???
+Terraform automatically determines dependencies between resources based on the configuration provided. Sometimes, explicit dependencies need to be defined to ensure resources are created in the correct order.
 
----
-name: execution-mode
-class: compact
-# Terraform Cloud Execution Modes
+```hcl
+resource "aws_security_group" "example" {
+  // Security group configuration...
+}
 
-**Local Execution** - Terraform commands run on your laptop or workstation and all variables are configured locally. Only the terraform state is stored remotely.
+resource "aws_instance" "example" {
+  // Instance configuration...
 
-**Remote Execution** - Terraform commands are run in a Terraform Cloud container environment. All variables are stored in the remote workspace. Code can be stored in a Version Control System repository. Limited to 1 concurrent run for free tier users.
+  vpc_security_group_ids = [aws_security_group.example.id]
+}
+```
 
-**Agent Execution** *(Enterprise only)* - Terraform Cloud Agents allow Terraform Cloud and Enterprise to communicate with isolated, private, or on-premises infrastructure. The agent architecture is pull-based, so no inbound connectivity is required. Any agent you provision will poll Terraform Cloud or Enterprise for work and carry out execution of that work locally.
-
----
-name: lab-exercise-2c
-# 👩‍💻 Lab Exercise: Terraform Cloud
-In the final part of the second lab we'll create a free Terraform Cloud account and enable remote storage of our state file.
-
-Return to the training lab and continue where you left off.
+In this example, Terraform understands that the instance must not be created until the security group is available.
 
 ---
-name: the-end
-class: img-caption
 
-# Congratulations, you completed the workshop!
-![HashiCorp Employees - 2019](https://storage.googleapis.com/instruqt-hashicorp-tracks/terraform-shared/hashicorp_employees.jpg)
+name: Meta-Arguments-Explanation
+# Understanding Meta-Arguments
 
----
-name: additional-resources
-class: compact
-# Additional Resources
-If you'd like to learn more about Terraform on AWS try the links below:
+???
+Meta-arguments modify certain behaviors of resources. Common meta-arguments include `count`, `provider`, `lifecycle`, and `depends_on`.
 
-HashiCorp Learning Portal<br>
-https://learn.hashicorp.com/terraform/
+```hcl
+resource "aws_instance" "example" {
+  count = 3 // Create three instances
 
-Terraform - Beyond the Basics with AWS<br>
-https://aws.amazon.com/blogs/apn/terraform-beyond-the-basics-with-aws/
+  // Instance configuration...
+}
+```
 
-Terraform AWS Provider Documentation<br>
-https://registry.terraform.io/providers/hashicorp/aws/latest/docs
-
-Link to this Slide Deck<br>
-https://git.io/JerH6
+This `count` meta-argument tells Terraform to create three instances based on this configuration.
 
 ---
-name: Feedback-Survey
-# Workshop Feedback Survey
-<br><br>
-.center[
-Your feedback is important to us!
 
-The survey is short, we promise:
+name: Explicit-Dependencies
+# Defining Explicit Dependencies with `depends_on`
 
-## https://bit.ly/hashiworkshopfeedback
-]
+???
+Sometimes Terraform's implicit dependency resolution needs help. Use `depends_on` to explicitly define dependencies.
+
+```hcl
+resource "aws_s3_bucket" "example" {
+  // Bucket configuration...
+}
+
+resource "aws_s3_bucket_object" "example" {
+  // Object configuration...
+
+  depends_on = [aws_s3_bucket.example]
+}
+```
+
+This ensures the S3 bucket is created before the object.
+
+---
+
+name: Meta-Arguments-Lifecycle
+# Using `lifecycle` Meta-Arguments
+
+???
+`lifecycle` meta-arguments control the lifecycle of a resource, such as preventing accidental deletion.
+
+```hcl
+resource "aws_s3_bucket" "example" {
+  // Bucket configuration...
+
+  lifecycle {
+    prevent_destroy = true
+```hcl
+  }
+}
+```
+
+This configuration prevents the bucket from being destroyed when applying `terraform destroy`.
+
+---
+
+name: Lab-Managing-Dependencies
+class: title
+# Lab Exercise: Managing Dependencies
+
+???
+In this lab, you'll practice defining explicit dependencies between resources and using meta-arguments to control resource behavior.
+
+## Objective:
+Create an AWS VPC, a security group within that VPC, and an instance that uses the security group. Ensure the security group is created before the instance.
+
+### Steps:
+1. **Define the VPC:**
+   Create a `main.tf` with a VPC resource.
+   ```hcl
+   resource "aws_vpc" "example_vpc" {
+     cidr_block = "10.0.0.0/16"
+     tags = {
+       Name = "example_vpc"
+     }
+   }
+   ```
+2. **Define the Security Group:**
+   Add a security group that depends on the VPC.
+   ```hcl
+   resource "aws_security_group" "example_sg" {
+     vpc_id = aws_vpc.example_vpc.id
+     // Additional configuration...
+   }
+   ```
+3. **Define the Instance:**
+   Create an instance that uses the security group. Use the `depends_on` meta-argument to ensure the security group is created first.
+   ```hcl
+   resource "aws_instance" "example_instance" {
+     ami = "ami-0c55b159cbfafe1f0"
+     instance_type = "t2.micro"
+     vpc_security_group_ids = [aws_security_group.example_sg.id]
+     // Ensure the instance is created after the security group
+     depends_on = [aws_security_group.example_sg]
+   }
+   ```
+4. **Apply Configuration:**
+   Initialize Terraform and apply your configuration. Observe the order in which resources are created.
+
+### Deliverable:
+Submit the `main.tf` file along with a screenshot of the `terraform apply` command output showing the resources being created in the correct order.
+
+---
+
+name: Workspaces-Intro
+class: title
+# Deep Dive into Terraform Workspaces
+
+???
+Terraform workspaces allow you to manage multiple states using the same configuration. This is especially useful for managing different environments like development, staging, and production.
+
+---
+
+name: Workspaces-Creation
+# Creating and Managing Workspaces
+
+???
+To create a new workspace and switch between workspaces, use the `terraform workspace` command.
+
+### Creating a New Workspace:
+```shell
+terraform workspace new dev
+```
+
+### Switching Between Workspaces:
+```shell
+terraform workspace select dev
+```
+
+### Listing Workspaces:
+```shell
+terraform workspace list
+```
+
+This flexibility allows you to apply different configurations for each environment using the same Terraform files.
+
+---
+
+name: Workspaces-Usage-Example
+# Example: Using Workspaces to Manage Environments
+
+???
+Consider a scenario where you want different instance sizes for your app in development vs. production environments.
+
+### Define the Instance with a Variable:
+```hcl
+resource "aws_instance" "app" {
+  instance_type = var.instance_type
+  // Additional configuration...
+}
+```
+
+### Use Workspace Names to Set the Variable:
+In `variables.tf`, define `instance_type` without a default. Then, in `dev.tfvars` and `prod.tfvars`, specify the instance types:
+
+**dev.tfvars:**
+```hcl
+instance_type = "t2.micro"
+```
+
+**prod.tfvars:**
+```hcl
+instance_type = "t2.large"
+```
+
+Apply configurations using the respective workspace and `.tfvars` file to manage your environments efficiently.
+
+---
+
