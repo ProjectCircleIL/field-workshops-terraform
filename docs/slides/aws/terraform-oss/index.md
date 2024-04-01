@@ -1299,15 +1299,11 @@ Import an existing AWS S3 bucket into Terraform.
 Submit your `main.tf` file and a screenshot of the `terraform state list` command output showing the imported S3 bucket.
 
 ---
-Building upon the introduction to Terraform's import functionality, we'll explore more advanced topics related to importing resources and manipulating state files. This additional content will delve deeper into practical use cases, strategies for managing complex imports, and tips for effectively integrating imported resources into existing Terraform configurations.
-
----
 
 name: Advanced-Import-Techniques
 class: title
 # Advanced Techniques for Terraform Import
 
-???
 Terraform's import feature is a powerful tool for bringing existing infrastructure under Terraform management. This section explores advanced techniques for leveraging import in complex scenarios and best practices for state manipulation.
 
 ---
