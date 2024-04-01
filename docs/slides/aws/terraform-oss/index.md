@@ -1096,8 +1096,9 @@ This module will introduce you to the concepts of managing dependencies and util
 name: Dependencies-Explanation
 # Understanding Resource Dependencies
 
-???
 Terraform automatically determines dependencies between resources based on the configuration provided. Sometimes, explicit dependencies need to be defined to ensure resources are created in the correct order.
+
+---
 
 ```hcl
 resource "aws_security_group" "example" {
@@ -1118,9 +1119,9 @@ In this example, Terraform understands that the instance must not be created unt
 name: Meta-Arguments-Explanation
 # Understanding Meta-Arguments
 
-???
 Meta-arguments modify certain behaviors of resources. Common meta-arguments include `count`, `provider`, `lifecycle`, and `depends_on`.
 
+---
 ```hcl
 resource "aws_instance" "example" {
   count = 3 // Create three instances
@@ -1136,8 +1137,9 @@ This `count` meta-argument tells Terraform to create three instances based on th
 name: Explicit-Dependencies
 # Defining Explicit Dependencies with `depends_on`
 
-???
 Sometimes Terraform's implicit dependency resolution needs help. Use `depends_on` to explicitly define dependencies.
+
+---
 
 ```hcl
 resource "aws_s3_bucket" "example" {
@@ -1174,11 +1176,9 @@ resource "aws_s3_bucket" "example" {
     # This configuration ignores changes to the tags attribute.
   }
 }
-```hcl
   }
 }
 ```
-
 
 ---
 
