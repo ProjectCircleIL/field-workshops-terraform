@@ -1405,6 +1405,121 @@ resource "aws_elastic_ip" "eip" {
   instance = aws_instance.app_server[0].id
 }
 ```
+---
+
+name: Advanced-Loops-in-Terraform
+class: title
+# Advanced Loops in Terraform with `for_each` and `for` Loops
+
+Terraform's `for_each` and `for` constructs allow for more dynamic and flexible infrastructure management. Here, we explore several examples to understand how to effectively use these constructs.
+
+---
+
+name: For-Each-Usage
+# Utilizing `for_each` with Resources
+
+The `for_each` construct is used to create multiple instances of a resource based on a map or a set of strings.
+---
+
+### Example: Creating Multiple S3 Buckets
+```hcl
+variable "bucket_names" {
+  type    = set(string)
+  default = { "logs", "uploads", "backups" }
+}
+
+resource "aws_s3_bucket" "app_buckets" {
+  for_each = var.bucket_names
+
+  bucket = each.key
+  acl    = "private"
+}
+```
+This example creates three S3 buckets with names "logs", "uploads", and "backups". Each bucket is uniquely identified by its name within the `for_each` loop.
+
+---
+
+name: For-Loop-Expressions
+# Using `for` Loops in Expressions
+
+Terraform's `for` loops can be used within expressions to transform and filter data structures.
+---
+
+### Example: Transforming a List of Strings
+```hcl
+variable "instance_names" {
+  type    = list(string)
+  default = ["instance1", "instance2", "instance3"]
+}
+
+output "instance_tags" {
+  value = { for name in var.instance_names : name => "${name}-tag" }
+}
+```
+This `for` loop expression takes a list of instance names and transforms it into a map where each value is suffixed with "-tag".
+---
+
+### Filtering with `for` Loops:
+```hcl
+variable "numbers" {
+  default = [1, 2, 3, 4, 5]
+}
+
+output "even_numbers" {
+  value = [for n in var.numbers : n if n % 2 == 0]
+}
+```
+This example filters the list of numbers to only include even numbers using a `for` loop with an `if` condition.
+
+---
+
+name: Dynamic-Block-For-Each
+# Dynamic Blocks with `for_each`
+
+Dynamic blocks can be used in conjunction with `for_each` to dynamically configure parts of a resource.
+---
+
+### Example: Creating Multiple Security Group Rules
+```hcl
+resource "aws_security_group" "app_sg" {
+  name = "app_sg"
+
+  dynamic "ingress" {
+    for_each = var.ingress_rules
+    content {
+      from_port   = ingress.value["from_port"]
+      to_port     = ingress.value["to_port"]
+      protocol    = ingress.value["protocol"]
+      cidr_blocks = ingress.value["cidr_blocks"]
+    }
+  }
+}
+
+variable "ingress_rules" {
+  description = "A map of ingress rules for the security group"
+  type = map(object({
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_blocks = list(string)
+  }))
+  default = {
+    ssh = {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    http = {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+}
+```
+This example demonstrates the use of dynamic blocks to create multiple ingress rules for a security group, with the rules defined in a variable.
 
 ---
 
