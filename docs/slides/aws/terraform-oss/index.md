@@ -1294,4 +1294,117 @@ instance_type = "t2.large"
 Apply configurations using the respective workspace and `.tfvars` file to manage your environments efficiently.
 
 ---
+---
+
+name: Lab-Workspaces
+class: title
+# Lab Exercise: Using Terraform Workspaces
+
+???
+In this lab, you will practice using Terraform workspaces to manage different environments for a hypothetical web application. You will create separate environments for development and production, each with different configurations.
+
+## Objective:
+Leverage Terraform workspaces to apply different configurations for development and production environments of a simple AWS EC2 instance.
+
+### Steps:
+1. **Prepare Your Configuration:**
+   In your `main.tf`, define an AWS EC2 instance with a dynamic instance type based on the workspace.
+   ```hcl
+   resource "aws_instance" "web" {
+     ami = "ami-0c55b159cbfafe1f0"
+     instance_type = var.instance_type[terraform.workspace]
+     // Other configurations...
+   }
+   ```
+   In `variables.tf`, define the `instance_type` variable as a map to accommodate different workspaces.
+   ```hcl
+   variable "instance_type" {
+     type = map(string)
+     default = {
+       default = "t2.micro"
+       dev = "t2.small"
+       prod = "t2.large"
+     }
+   }
+   ```
+2. **Initialize Workspaces:**
+   Initialize the Terraform configuration, then create two new workspaces named `dev` and `prod`.
+   ```shell
+   terraform init
+   terraform workspace new dev
+   terraform workspace new prod
+   ```
+3. **Apply Configuration to Each Workspace:**
+   Apply the Terraform configuration to each workspace, observing the differences.
+   ```shell
+   terraform workspace select dev
+   terraform apply
+   terraform workspace select prod
+   terraform apply
+   ```
+4. **Observe the Differences:**
+   Use the AWS Management Console or AWS CLI to observe the differences in the EC2 instances created in the `dev` and `prod` environments.
+
+### Deliverable:
+Submit your `main.tf` and `variables.tf` files along with screenshots or logs demonstrating the EC2 instances created for each workspace.
+
+---
+
+name: Importing-Infrastructure-Intro
+class: title
+# Mastering Infrastructure Import in Terraform
+
+???
+One of Terraform's powerful features is the ability to import existing infrastructure. This enables you to bring resources under Terraform's management without needing to recreate them.
+
+---
+
+name: How-to-Import
+# Step-by-Step Guide to Importing Resources
+
+???
+Importing resources into Terraform involves identifying the existing resource in your infrastructure and mapping it to a Terraform resource in your configuration.
+
+### Example: Importing an AWS S3 Bucket:
+1. **Define the Resource in Terraform:**
+   First, define a placeholder resource in your `main.tf` for the S3 bucket you intend to import.
+   ```hcl
+   resource "aws_s3_bucket" "imported_bucket" {
+     # Intentionally left blank
+   }
+   ```
+2. **Use the `terraform import` Command:**
+   Use the `terraform import` command to map the existing S3 bucket to your Terraform resource.
+   ```shell
+   terraform import aws_s3_bucket.imported_bucket my-existing-bucket-name
+   ```
+3. **Review the State:**
+   After importing, review your Terraform state to ensure the resource has been successfully imported and is now managed by Terraform.
+
+---
+
+name: Lab-Importing-Infrastructure
+class: title
+# Lab Exercise: Importing Existing Infrastructure
+
+???
+In this lab, you'll practice importing existing infrastructure into Terraform. You will import an existing AWS resource and bring it under Terraform management.
+
+## Objective:
+Import an existing AWS S3 bucket into Terraform.
+
+### Steps:
+1. **Identify an Existing S3 Bucket:**
+   Choose an existing S3 bucket in your AWS account to import. Note its name.
+2. **Prepare the Terraform Configuration:**
+   Define a placeholder AWS S3 bucket resource in your `main.tf`.
+3. **Import the S3 Bucket:**
+   Use the `terraform import` command to import the S3 bucket into Terraform management.
+4. **Verify the Import:**
+   Review the Terraform state to confirm the S3 bucket is now managed by Terraform.
+
+### Deliverable:
+Submit your `main.tf` file and a screenshot of the `terraform state list` command output showing the imported S3 bucket.
+
+---
 
