@@ -1084,12 +1084,6 @@ class: title
 ## Resource dependencies and meta-arguments
 
 ---
-Given the complexity and depth of each topic, providing detailed slides, examples, and lab exercises for each section will be quite extensive. Let's start with the first section on "Managing Dependencies and Meta-Arguments in Terraform."
-
----
-
-```markdown
----
 name: Managing-Dependencies-and-Meta-Arguments-Intro
 class: title
 # Understanding Dependencies and Meta-Arguments
@@ -1115,7 +1109,6 @@ resource "aws_instance" "example" {
 
   vpc_security_group_ids = [aws_security_group.example.id]
 }
-```
 
 In this example, Terraform understands that the instance must not be created until the security group is available.
 
