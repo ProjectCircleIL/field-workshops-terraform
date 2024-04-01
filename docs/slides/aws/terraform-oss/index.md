@@ -1299,6 +1299,109 @@ Import an existing AWS S3 bucket into Terraform.
 Submit your `main.tf` file and a screenshot of the `terraform state list` command output showing the imported S3 bucket.
 
 ---
+Building upon the introduction to Terraform's import functionality, we'll explore more advanced topics related to importing resources and manipulating state files. This additional content will delve deeper into practical use cases, strategies for managing complex imports, and tips for effectively integrating imported resources into existing Terraform configurations.
+
+---
+
+name: Advanced-Import-Techniques
+class: title
+# Advanced Techniques for Terraform Import
+
+???
+Terraform's import feature is a powerful tool for bringing existing infrastructure under Terraform management. This section explores advanced techniques for leveraging import in complex scenarios and best practices for state manipulation.
+
+---
+
+name: Complex-Import-Scenarios
+# Handling Complex Import Scenarios
+
+Some resources or modules may require importing multiple components or related resources. Complex scenarios might involve resources that are interdependent or require a specific import order.
+---
+
+### Strategy for Complex Imports:
+1. **Sequential Imports:** For resources with dependencies, import lower-level resources first, gradually moving up the dependency chain.
+2. **Module Imports:** If using modules, consider importing the module's underlying resources individually, then refactoring your configuration to represent the module structure.
+---
+
+### Example: Importing AWS EC2 Instance with Attached Volumes
+- Import the EC2 instance first:
+  ```shell
+  terraform import aws_instance.my_instance i-1234567890abcdef0
+  ```
+- Then, import each EBS volume attached to it:
+  ```shell
+  terraform import aws_ebs_volume.my_volume vol-049df61146f4d7901
+  ```
+- Finally, ensure your Terraform configuration reflects the relationship between the instance and volumes.
+
+---
+
+name: State-File-Manipulation
+# Manipulating the Terraform State File
+
+After importing resources, you may need to manipulate the Terraform state file to accurately reflect your infrastructure's desired configuration.
+---
+
+### Moving Resources within the State
+The `terraform state mv` command allows you to move items within the state file, which is particularly useful after importing resources into a module structure.
+---
+
+```shell
+terraform state mv aws_instance.my_instance module.my_module.aws_instance.my_instance
+```
+---
+
+### Removing Items from the State
+Use `terraform state rm` to remove items from the state that are no longer managed by Terraform.
+
+```shell
+terraform state rm aws_instance.unmanaged_instance
+```
+
+---
+
+name: Refactoring-Post-Import
+# Refactoring Configurations Post-Import
+
+After importing resources, you'll likely need to refactor your Terraform configurations to align with your infrastructure's current state and organization.
+---
+
+### Steps for Refactoring:
+1. **Review Imported Resources:** Examine the state file and the attributes of imported resources.
+2. **Update Terraform Configurations:** Adjust your Terraform configurations to match the imported state, ensuring resource attributes and module structures are accurately represented.
+3. **Validate and Plan:** Use `terraform plan` to identify any discrepancies between your configuration and the current state.
+
+### Best Practices:
+- **Incremental Changes:** Make and apply changes incrementally to minimize impact and risk.
+- **Documentation:** Update documentation to reflect any changes in the infrastructure as code.
+
+---
+
+name: Lab-Advanced-Import-and-State-Manipulation
+class: title
+# Lab: Advanced Import and State Manipulation
+
+This lab focuses on importing complex resources and manipulating the state file to integrate imported resources into your Terraform configurations effectively.
+---
+
+## Objectives:
+1. Import a complex resource with dependencies.
+2. Manipulate the Terraform state to reorganize resources post-import.
+3. Refactor your Terraform configurations to align with the imported state.
+
+---
+### Steps:
+1. **Select a Complex Resource:** Choose a resource with dependencies for import, such as an AWS EC2 instance with attached security groups and EBS volumes.
+2. **Import Resources Sequentially:** Follow the strategy for complex imports to bring all components under Terraform management.
+3. **Manipulate State File:** Use `terraform state mv` and `terraform state rm` as needed to organize your state file.
+4. **Refactor Terraform Configurations:** Update your configurations to reflect the imported infrastructure accurately.
+5. **Validate Changes:** Run `terraform plan` to ensure no configuration drifts and your infrastructure is accurately represented.
+
+---
+### Deliverable:
+Submit a brief report detailing the resources you chose to import, the steps taken to manipulate the state file, and any challenges encountered during refactoring. Include before and after snippets of your Terraform configuration.
+
+---
 
 name: Securing-Terraform-Deployments-Intro
 class: title
