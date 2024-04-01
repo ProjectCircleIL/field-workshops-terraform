@@ -1240,7 +1240,6 @@ name: Importing-Infrastructure-Intro
 class: title
 # Mastering Infrastructure Import in Terraform
 
-???
 One of Terraform's powerful features is the ability to import existing infrastructure. This enables you to bring resources under Terraform's management without needing to recreate them.
 
 ---
@@ -1248,9 +1247,9 @@ One of Terraform's powerful features is the ability to import existing infrastru
 name: How-to-Import
 # Step-by-Step Guide to Importing Resources
 
-???
 Importing resources into Terraform involves identifying the existing resource in your infrastructure and mapping it to a Terraform resource in your configuration.
 
+---
 ### Example: Importing an AWS S3 Bucket:
 1. **Define the Resource in Terraform:**
    First, define a placeholder resource in your `main.tf` for the S3 bucket you intend to import.
@@ -1259,11 +1258,13 @@ Importing resources into Terraform involves identifying the existing resource in
      # Intentionally left blank
    }
    ```
+---
 2. **Use the `terraform import` Command:**
    Use the `terraform import` command to map the existing S3 bucket to your Terraform resource.
    ```shell
    terraform import aws_s3_bucket.imported_bucket my-existing-bucket-name
    ```
+---
 3. **Review the State:**
    After importing, review your Terraform state to ensure the resource has been successfully imported and is now managed by Terraform.
 
@@ -1273,33 +1274,36 @@ name: Lab-Importing-Infrastructure
 class: title
 # Lab Exercise: Importing Existing Infrastructure
 
-???
 In this lab, you'll practice importing existing infrastructure into Terraform. You will import an existing AWS resource and bring it under Terraform management.
 
+---
 ## Objective:
 Import an existing AWS S3 bucket into Terraform.
+---
 
 ### Steps:
 1. **Identify an Existing S3 Bucket:**
    Choose an existing S3 bucket in your AWS account to import. Note its name.
+---
 2. **Prepare the Terraform Configuration:**
    Define a placeholder AWS S3 bucket resource in your `main.tf`.
+---
 3. **Import the S3 Bucket:**
    Use the `terraform import` command to import the S3 bucket into Terraform management.
+---
 4. **Verify the Import:**
    Review the Terraform state to confirm the S3 bucket is now managed by Terraform.
+---
 
 ### Deliverable:
 Submit your `main.tf` file and a screenshot of the `terraform state list` command output showing the imported S3 bucket.
 
----
 ---
 
 name: Securing-Terraform-Deployments-Intro
 class: title
 # Securing Terraform Deployments
 
-???
 Ensuring the security of your Terraform deployments involves managing secrets and sensitive data carefully. This section will cover strategies for securely handling secrets in Terraform.
 
 ---
@@ -1307,8 +1311,8 @@ Ensuring the security of your Terraform deployments involves managing secrets an
 name: Managing-Secrets
 # Managing Secrets in Terraform
 
-???
 Terraform can use various methods to manage secrets and sensitive information, ensuring they are not exposed in your configurations or state files.
+---
 
 ### Using Environment Variables:
 Environment variables can be used to keep secrets out of your Terraform configurations.
@@ -1316,6 +1320,7 @@ Environment variables can be used to keep secrets out of your Terraform configur
 export TF_VAR_secret_key="your_secret_key_here"
 ```
 These can then be referenced in your Terraform configurations without hardcoding sensitive information.
+---
 
 ### Using Terraform Vault Provider:
 The Terraform Vault provider allows storing and retrieving secrets from HashiCorp Vault, a dedicated secrets management tool.
@@ -1329,6 +1334,7 @@ output "db_password" {
   sensitive = true
 }
 ```
+---
 
 ### Marking Variables as Sensitive:
 You can mark variables as sensitive in Terraform to prevent their values from being displayed in logs or console output.
@@ -1345,12 +1351,13 @@ name: Lab-Securing-Deployments
 class: title
 # Lab Exercise: Securing Terraform Deployments
 
-???
 In this lab, you will practice securing your Terraform deployments by managing secrets with environment variables and the Vault provider.
 
+---
 ## Objective:
 Configure a Terraform project to securely manage an API key.
 
+---
 ### Steps:
 1. **Set up an Environment Variable:**
    Define an environment variable for your API key.
@@ -1361,6 +1368,7 @@ Configure a Terraform project to securely manage an API key.
 4. **Apply Your Configuration:**
    Run `terraform apply` and ensure the API key is used correctly without being exposed in logs.
 
+---
 ### Deliverable:
 Submit your modified Terraform configuration files and a brief explanation of the steps you took to secure the API key. Ensure no sensitive information is included in your submission.
 
@@ -1370,7 +1378,6 @@ name: Advanced-Terraform-Techniques-Intro
 class: title
 # Advanced Terraform Techniques
 
-???
 Beyond the basics, Terraform offers advanced techniques for more dynamic and flexible infrastructure management. This section explores loops, conditional expressions, and error handling.
 
 ---
@@ -1378,8 +1385,8 @@ Beyond the basics, Terraform offers advanced techniques for more dynamic and fle
 name: Loops-and-Conditional-Expressions
 # Using Loops and Conditional Expressions
 
-???
 Terraform supports loop constructs like `count`, `for_each`, and dynamic blocks to create multiple instances of resources based on a list or map. Conditional expressions can be used to include or modify resources based on specified conditions.
+---
 
 ### Example: Creating Multiple Instances with `count`:
 ```hcl
@@ -1390,6 +1397,7 @@ resource "aws_instance" "app_server" {
 }
 ```
 
+---
 ### Conditional Creation of Resources:
 ```hcl
 resource "aws_elastic_ip" "eip" {
@@ -1403,8 +1411,9 @@ resource "aws_elastic_ip" "eip" {
 name: Error-Handling
 # Error Handling in Terraform
 
-???
 Error handling in Terraform can be managed through careful use of input variable validations, preconditions, and sensible defaults to prevent configuration errors.
+
+---
 
 ### Example: Variable Validation
 ```hcl
@@ -1427,21 +1436,22 @@ name: Lab-Advanced-Techniques
 class: title
 # Lab Exercise: Advanced Terraform Techniques
 
-???
 In this lab, you will apply advanced Terraform techniques by utilizing loops, conditional expressions, and implementing error handling in your configurations.
+---
 
 ## Objective:
 Enhance a Terraform configuration to dynamically create resources based on input variables and conditions, with proper error handling.
+---
 
 ### Steps:
 1. **Dynamic Resource Creation:**
    Use `count` or `for_each` to create a dynamic number of AWS S3 buckets based on input variables.
 2. **Conditional Resource Creation:**
    Add a condition to create an AWS Elastic IP only if a specific variable is set to true.
-3
-
-. **Add Variable Validation:**
+3. **Add Variable Validation:**
    Implement validation for an input variable to ensure it meets specific criteria.
+
+---
 
 ### Deliverable:
 Submit your Terraform configuration files demonstrating the use of advanced techniques. Include a brief description of how each technique is applied in your configuration.
