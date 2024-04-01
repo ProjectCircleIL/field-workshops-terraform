@@ -1457,3 +1457,97 @@ Enhance a Terraform configuration to dynamically create resources based on input
 Submit your Terraform configuration files demonstrating the use of advanced techniques. Include a brief description of how each technique is applied in your configuration.
 
 ---
+
+name: Integrating-Terraform-into-CICD-Intro
+class: title
+# Integrating Terraform into CI/CD Pipelines
+
+Automating infrastructure management with CI/CD pipelines enhances efficiency, reduces human error, and ensures consistency across environments. This section explores how to integrate Terraform into CI/CD workflows.
+---
+
+name: Terraform-CICD-Concepts
+# Key Concepts for Terraform CI/CD Integration
+
+Integrating Terraform into CI/CD pipelines involves several key practices:
+---
+
+### Version Control:
+Ensure all Terraform configurations are stored in a version control system (VCS) to track changes and collaborate.
+---
+
+### Automated Testing:
+Incorporate automated testing of Terraform configurations to catch errors early. Tools like `terraform validate` and `terraform plan` can be used in pipelines for this purpose.
+---
+
+### Remote State Management:
+Use remote state backends such as Terraform Cloud or AWS S3 with state locking to manage state files securely and collaboratively.
+---
+
+### Infrastructure as Code (IaC) Workflow:
+Adopt a consistent IaC workflow, utilizing pull requests for changes, code reviews, and automated deployments through the pipeline.
+---
+
+name: CI-CD-Tools-and-Terraform
+# CI/CD Tools and Terraform
+Several CI/CD tools can be used to automate Terraform workflows, including Jenkins, GitLab CI, GitHub Actions, and CircleCI. The choice of tool depends on your existing ecosystem and specific needs.
+---
+
+### Example: GitHub Actions Workflow for Terraform
+```yaml
+name: 'Terraform CI'
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 'Checkout'
+      uses: actions/checkout@v2
+
+    - name: 'Terraform Init and Apply'
+      run: |
+        terraform init
+        terraform apply -auto-approve
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+```
+This GitHub Actions workflow automates `terraform init` and `terraform apply` commands upon pushes to the main branch.
+
+---
+
+name: Lab-CICD-Integration
+class: title
+# Lab Exercise: Integrating Terraform with CI/CD
+For this lab, you'll set up a basic CI/CD pipeline for a Terraform project using GitHub Actions (or your CI/CD tool of choice) to automate the deployment of infrastructure.
+---
+
+## Objective:
+Create a CI/CD pipeline that automatically applies Terraform configurations upon changes in your VCS.
+---
+
+### Steps:
+1. **Prepare Your Terraform Configuration:**
+   Create a simple Terraform configuration that provisions an AWS S3 bucket.
+2. **Set Up a GitHub Repository:**
+   Initialize a GitHub repository and push your Terraform configuration.
+3. **Configure GitHub Actions:**
+   Create a `.github/workflows/terraform.yml` file in your repository with the content similar to the example provided.
+4. **Configure Secrets:**
+   Add your AWS credentials as secrets in the GitHub repository settings.
+5. **Test Your Pipeline:**
+   Make a change to your Terraform configuration, commit, and push the changes. Observe the automated pipeline run.
+---
+
+### Deliverable:
+Submit the link to your GitHub repository containing the Terraform configuration and GitHub Actions workflow. Include a brief explanation of your pipeline and any observations or challenges encountered.
+
+---
+
+
