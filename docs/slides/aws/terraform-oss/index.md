@@ -1851,10 +1851,12 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-
     steps:
     - name: 'Checkout'
       uses: actions/checkout@v2
+```
+---
+```yaml
 
     - name: 'Terraform Init and Apply'
       run: |
